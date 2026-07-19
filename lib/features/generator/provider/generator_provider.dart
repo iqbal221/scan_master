@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quick_scanner/features/generator/data/models/barcode_type.dart';
+import 'package:quick_scanner/features/generator/data/models/generator_mode.dart';
 import 'package:quick_scanner/features/generator/data/models/qr_type.dart';
 import 'package:quick_scanner/features/generator/services/qr_export_service.dart';
 import 'package:quick_scanner/features/generator/services/qr_share_service.dart';
@@ -7,6 +9,23 @@ class GeneratorProvider extends ChangeNotifier {
   final QrExportService _exportService = QrExportService();
   final QrShareService _shareService = QrShareService();
   final GlobalKey qrKey = GlobalKey();
+
+  GeneratorMode _mode = GeneratorMode.qr;
+
+  GeneratorMode get mode => _mode;
+
+  //==========================
+  // mode selector
+  //==========================
+
+  void changeMode(GeneratorMode mode) {
+    _mode = mode;
+
+    clearData();
+
+    notifyListeners();
+  }
+
   //==========================
   // Controllers
   //==========================
@@ -22,6 +41,10 @@ class GeneratorProvider extends ChangeNotifier {
   final TextEditingController latitudeController = TextEditingController();
 
   final TextEditingController longitudeController = TextEditingController();
+
+  String _barcodeData = '';
+
+  String get barcodeData => _barcodeData;
 
   //==========================
   // State
@@ -44,6 +67,18 @@ class GeneratorProvider extends ChangeNotifier {
   Color get backgroundColor => _backgroundColor;
 
   //==========================
+  // Change Bar code Type
+  //==========================
+  BarcodeType _barcodeType = BarcodeType.code128;
+
+  BarcodeType get barcodeType => _barcodeType;
+
+  void changeBarcodeType(BarcodeType type) {
+    _barcodeType = type;
+    notifyListeners();
+  }
+
+  //==========================
   // Change QR Type
   //==========================
 
@@ -51,6 +86,28 @@ class GeneratorProvider extends ChangeNotifier {
     _selectedType = type;
 
     clearData();
+
+    notifyListeners();
+  }
+
+  //==========================
+  // select generate mode
+  //==========================
+
+  void generate() {
+    if (_mode == GeneratorMode.qr) {
+      generateQR();
+    } else {
+      generateBarcode();
+    }
+  }
+
+  //==========================
+  // Generate barcode
+  //==========================
+
+  void generateBarcode() {
+    _barcodeData = contentController.text.trim();
 
     notifyListeners();
   }

@@ -1,0 +1,1 @@
+enum GeneratorMode { qr, barcode }

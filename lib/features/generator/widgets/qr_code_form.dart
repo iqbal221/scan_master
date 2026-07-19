@@ -4,8 +4,8 @@ import 'package:quick_scanner/features/generator/data/models/qr_type.dart';
 
 import '../provider/generator_provider.dart';
 
-class GeneratorForm extends StatelessWidget {
-  const GeneratorForm({super.key});
+class QRCodeForm extends StatelessWidget {
+  const QRCodeForm({super.key});
 
   @override
   Widget build(BuildContext context) {
