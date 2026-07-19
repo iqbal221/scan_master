@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quick_scanner/features/generator/presentation/screens/generator_screen.dart';
 import 'package:quick_scanner/features/home/splash_screen.dart';
+import 'package:quick_scanner/features/scanner/presentation/screens/result_screen.dart';
+import 'package:quick_scanner/features/scanner/presentation/screens/scanner_screen.dart';
 
 class AppRoutes {
   static Route<dynamic> routes(RouteSettings settings) {
@@ -10,14 +12,18 @@ class AppRoutes {
       widget = GeneratorScreen();
     } else if (settings.name == SplashScreen.name) {
       widget = SplashScreen();
-      // } else if (settings.name == OtpVerifyScreen.name) {
-      //   final args = settings.arguments as Map?;
-      //   final phone = args?['phoneNumber'] ?? '';
-      //   widget = OtpVerifyScreen(phoneNumber: phone);
-      // } else if (settings.name == ProfileScreen.name) {
-      //   widget = ProfileScreen();
-      // } else if (settings.name == NewUserProfileScreen.name) {
-      //   widget = NewUserProfileScreen();
+    } else if (settings.name == ScannerScreen.name) {
+      widget = ScannerScreen();
+    } else if (settings.name == ScanResultScreen.name) {
+      final args = settings.arguments as Map<String, dynamic>;
+
+      widget = ScanResultScreen(
+        content: args['content'],
+        type: args['type'],
+        format: args['format'],
+        scannedAt: args['scannedAt'],
+      );
+
       // } else if (settings.name == MainNavBarScreen.name) {
       //   widget = MainNavBarScreen(initialIndex: 1);
       // } else if (settings.name == UpdateUserProfileScreen.name) {

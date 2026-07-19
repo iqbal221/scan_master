@@ -17,18 +17,6 @@ class GeneratorScreen extends StatefulWidget {
 class _GeneratorScreenState extends State<GeneratorScreen> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => GeneratorProvider(),
-      child: const _GeneratorView(),
-    );
-  }
-}
-
-class _GeneratorView extends StatelessWidget {
-  const _GeneratorView();
-
-  @override
-  Widget build(BuildContext context) {
     final provider = context.watch<GeneratorProvider>();
 
     return Scaffold(

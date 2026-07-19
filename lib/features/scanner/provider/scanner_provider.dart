@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:quick_scanner/features/scanner/service/scanner_service.dart';
 
 class ScannerProvider extends ChangeNotifier {
   ScannerProvider();
+
+  final ScannerService _scannerService = ScannerService();
 
   final MobileScannerController controller = MobileScannerController(
     detectionSpeed: DetectionSpeed.normal,
@@ -88,10 +91,12 @@ class ScannerProvider extends ChangeNotifier {
 
     if (barcode.rawValue == null) return;
 
-    _hasScanned = true;
+    final result = _scannerService.parse(barcode.rawValue!);
 
-    _scanResult = barcode.rawValue;
+    _scanResult = result.rawValue;
     _barcodeFormat = barcode.format;
+
+    _hasScanned = true;
 
     notifyListeners();
   }

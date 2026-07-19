@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
+import 'package:quick_scanner/features/scanner/presentation/screens/result_screen.dart';
+import 'package:quick_scanner/features/scanner/service/scanner_service.dart';
 import 'package:quick_scanner/features/scanner/widgets/scanner_overlay.dart';
+
+import '../../provider/scanner_provider.dart';
 
 class ScannerScreen extends StatefulWidget {
   static const String name = '/scanner';
@@ -12,67 +17,79 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
-  final MobileScannerController controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.normal,
-    facing: CameraFacing.back,
-    returnImage: false,
-  );
-
-  bool _isScanned = false;
-
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ScannerProvider>();
+
     return Scaffold(
       body: Stack(
         children: [
           MobileScanner(
-            controller: controller,
-            onDetect: (capture) {
-              if (_isScanned) return;
+            controller: provider.controller,
+            onDetect: (capture) async {
+              if (provider.hasScanned) return;
 
               final barcode = capture.barcodes.first;
 
               if (barcode.rawValue == null) return;
 
-              _isScanned = true;
+              provider.onDetect(capture);
 
-              Navigator.pop(context, barcode.rawValue);
+              final result = ScannerService().parse(barcode.rawValue!);
+
+              await provider.pauseScanner();
+
+              if (!mounted) return;
+
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ScanResultScreen(
+                    content: result.rawValue,
+                    type: result.type.name,
+                    format: barcode.format.name,
+                    scannedAt: result.scannedAt,
+                  ),
+                ),
+              );
+
+              provider.resetScan();
+              await provider.resumeScanner();
             },
           ),
 
           const ScannerOverlay(),
 
           SafeArea(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  ),
 
-                    const Spacer(),
+                  const Spacer(),
 
-                    IconButton(
-                      onPressed: () => controller.toggleTorch(),
-                      icon: const Icon(Icons.flash_on, color: Colors.white),
+                  IconButton(
+                    onPressed: provider.toggleFlash,
+                    icon: Icon(
+                      provider.torchEnabled ? Icons.flash_on : Icons.flash_off,
+                      color: Colors.white,
                     ),
-                  ],
-                ),
+                  ),
+
+                  IconButton(
+                    onPressed: provider.switchCamera,
+                    icon: const Icon(Icons.cameraswitch, color: Colors.white),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

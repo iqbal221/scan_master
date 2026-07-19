@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:quick_scanner/core/presentation/screens/main_navbar_screen.dart';
 import 'package:quick_scanner/features/generator/presentation/screens/generator_screen.dart';
+import 'package:quick_scanner/features/scanner/presentation/screens/scanner_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String name = '/';
@@ -22,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const GeneratorScreen()),
+        MaterialPageRoute(builder: (_) => const MainNavBarScreen()),
       );
     });
   }
