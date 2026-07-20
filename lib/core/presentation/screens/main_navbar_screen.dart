@@ -20,8 +20,8 @@ class _MainNavBarScreenState extends State<MainNavBarScreen> {
   final Color primaryColor = const Color(0xFF002DE3);
 
   final List<Widget> _screens = [
-    const ScannerScreen(),
     const GeneratorScreen(),
+    const ScannerScreen(),
     const HistoryScreen(),
   ];
 

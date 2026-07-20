@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.20.3
   url_launcher: ^6.3.2
   barcode_widget: ^2.0.4
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
