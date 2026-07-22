@@ -26,7 +26,7 @@ class HistoryRepository {
 
     final List<Map<String, dynamic>> maps = await db.query(
       tableName,
-      orderBy: 'createdAt DESC',
+      orderBy: 'scannedAt DESC',
     );
 
     return maps.map((e) => HistoryModel.fromMap(e)).toList();
@@ -109,7 +109,7 @@ class HistoryRepository {
       tableName,
       where: 'content LIKE ? OR type LIKE ?',
       whereArgs: ['%$keyword%', '%$keyword%'],
-      orderBy: 'createdAt DESC',
+      orderBy: 'scannedAt DESC',
     );
 
     return maps.map((e) => HistoryModel.fromMap(e)).toList();
@@ -126,7 +126,7 @@ class HistoryRepository {
       tableName,
       where: 'isFavorite = ?',
       whereArgs: [1],
-      orderBy: 'createdAt DESC',
+      orderBy: 'scannedAt DESC',
     );
 
     return maps.map((e) => HistoryModel.fromMap(e)).toList();

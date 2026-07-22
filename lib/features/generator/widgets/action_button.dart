@@ -15,28 +15,28 @@ class ActionButtons extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: FilledButton.icon(
+          child: ElevatedButton.icon(
             onPressed: isGenerated
                 ? () async {
                     await provider.downloadQr(context);
                   }
                 : null,
             icon: const Icon(Icons.download),
-            label: const Text('Download'),
+            label: const Text("Download"),
           ),
         ),
 
         const SizedBox(width: 12),
 
         Expanded(
-          child: FilledButton.icon(
+          child: ElevatedButton.icon(
             onPressed: isGenerated
                 ? () async {
                     await provider.shareQr(context);
                   }
                 : null,
             icon: const Icon(Icons.share),
-            label: const Text('Share'),
+            label: const Text("Share"),
           ),
         ),
       ],

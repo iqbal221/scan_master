@@ -25,15 +25,26 @@ class HistoryProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _history = await _repository.getAllHistory();
+    debugPrint("Loading history...");
 
-    _sortNewest();
+    try {
+      _history = await _repository.getAllHistory();
 
-    _isLoading = false;
+      debugPrint("History Count: ${_history.length}");
 
-    notifyListeners();
+      _sortNewest();
+    } catch (e, stackTrace) {
+      debugPrint("History Error: $e");
+      debugPrint(stackTrace.toString());
+
+      _history = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+
+      debugPrint("Loading Finished");
+    }
   }
-
   //==============================
   // Add Scan
   //==============================
@@ -60,6 +71,8 @@ class HistoryProvider extends ChangeNotifier {
 
   Future<void> deleteAllHistory() async {
     await _repository.deleteAllHistory();
+
+    await loadHistory();
 
     _history.clear();
 
@@ -110,19 +123,21 @@ class HistoryProvider extends ChangeNotifier {
   }
 
   void sortOldest() {
-    _history.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    _history.sort((a, b) => a.scannedAt.compareTo(b.scannedAt));
 
     notifyListeners();
   }
 
-  void sortFavorites() {
+  Future<void> sortFavorites() async {
+    _history = await _repository.getAllHistory();
+
     _history = _history.where((item) => item.isFavorite).toList();
 
     notifyListeners();
   }
 
   void _sortNewest() {
-    _history.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    _history.sort((a, b) => b.scannedAt.compareTo(a.scannedAt));
   }
 
   //==============================

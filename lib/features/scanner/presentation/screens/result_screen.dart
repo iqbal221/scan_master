@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:quick_scanner/features/scanner/provider/result_provider.dart';
 
 class ScanResultScreen extends StatelessWidget {
   static const String name = '/scan-result';
@@ -60,11 +62,7 @@ class ScanResultScreen extends StatelessWidget {
 
             FilledButton.icon(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: content));
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Copied to clipboard")),
-                );
+                context.read<ResultProvider>().copy(context, content);
               },
               icon: const Icon(Icons.copy),
               label: const Text("Copy"),
@@ -73,7 +71,9 @@ class ScanResultScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             FilledButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                context.read<ResultProvider>().share(content);
+              },
               icon: const Icon(Icons.share),
               label: const Text("Share"),
             ),
@@ -81,7 +81,11 @@ class ScanResultScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             FilledButton.icon(
-              onPressed: () {},
+              onPressed: context.read<ResultProvider>().canOpen(content)
+                  ? () {
+                      context.read<ResultProvider>().open(content);
+                    }
+                  : null,
               icon: const Icon(Icons.open_in_browser),
               label: const Text("Open"),
             ),
@@ -89,7 +93,21 @@ class ScanResultScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             FilledButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                await context.read<ResultProvider>().saveHistory(
+                  content: content,
+                  type: type,
+                  format: format,
+                  scannedAt: scannedAt,
+                );
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Saved successfully")),
+                  );
+                }
+              },
+
               icon: const Icon(Icons.save),
               label: const Text("Save History"),
             ),
@@ -97,7 +115,17 @@ class ScanResultScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             FilledButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                final provider = context.read<ResultProvider>();
+
+                if (provider.historyId != null) {
+                  provider.toggleFavorite(provider.historyId!);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please save history first.")),
+                  );
+                }
+              },
               icon: const Icon(Icons.favorite_border),
               label: const Text("Favorite"),
             ),

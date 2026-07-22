@@ -9,9 +9,9 @@ class HistoryInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final date = DateFormat.yMMMMd().format(history.createdAt);
+    final date = DateFormat.yMMMMd().format(history.scannedAt);
 
-    final time = DateFormat.jm().format(history.createdAt);
+    final time = DateFormat.jm().format(history.scannedAt);
 
     return Card(
       child: Padding(

@@ -4,7 +4,7 @@ class HistoryModel {
   final String type;
   final String format;
   final bool isFavorite;
-  final DateTime createdAt;
+  final DateTime scannedAt;
 
   const HistoryModel({
     this.id,
@@ -12,7 +12,7 @@ class HistoryModel {
     required this.type,
     required this.format,
     this.isFavorite = false,
-    required this.createdAt,
+    required this.scannedAt,
   });
 
   /// Copy With
@@ -22,7 +22,7 @@ class HistoryModel {
     String? type,
     String? format,
     bool? isFavorite,
-    DateTime? createdAt,
+    DateTime? scannedAt,
   }) {
     return HistoryModel(
       id: id ?? this.id,
@@ -30,7 +30,7 @@ class HistoryModel {
       type: type ?? this.type,
       format: format ?? this.format,
       isFavorite: isFavorite ?? this.isFavorite,
-      createdAt: createdAt ?? this.createdAt,
+      scannedAt: scannedAt ?? this.scannedAt,
     );
   }
 
@@ -42,7 +42,7 @@ class HistoryModel {
       'type': type,
       'format': format,
       'isFavorite': isFavorite ? 1 : 0,
-      'createdAt': createdAt.toIso8601String(),
+      'scannedAt': scannedAt.toIso8601String(),
     };
   }
 
@@ -54,7 +54,7 @@ class HistoryModel {
       type: map['type'] as String,
       format: map['format'] as String,
       isFavorite: (map['isFavorite'] ?? 0) == 1,
-      createdAt: DateTime.parse(map['createdAt'] as String),
+      scannedAt: DateTime.parse(map['scannedAt'] as String),
     );
   }
 
@@ -74,7 +74,7 @@ HistoryModel(
   type: $type,
   format: $format,
   isFavorite: $isFavorite,
-  createdAt: $createdAt,
+  scannedAt: $scannedAt,
 )
 ''';
   }
@@ -89,9 +89,9 @@ HistoryModel(
           type == other.type &&
           format == other.format &&
           isFavorite == other.isFavorite &&
-          createdAt == other.createdAt;
+          scannedAt == other.scannedAt;
 
   @override
   int get hashCode =>
-      Object.hash(id, content, type, format, isFavorite, createdAt);
+      Object.hash(id, content, type, format, isFavorite, scannedAt);
 }

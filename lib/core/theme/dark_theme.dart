@@ -81,5 +81,27 @@ class DarkTheme {
         borderSide: const BorderSide(color: AppColors.darkPrimary, width: 2),
       ),
     ),
+
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: AppColors.cardDark,
+      indicatorColor: AppColors.darkPrimary.withValues(alpha: 0.20),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const TextStyle(
+            color: AppColors.darkPrimary,
+            fontWeight: FontWeight.bold,
+          );
+        }
+
+        return const TextStyle(color: Colors.white70);
+      }),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const IconThemeData(color: AppColors.darkPrimary, size: 28);
+        }
+
+        return const IconThemeData(color: Colors.white70, size: 24);
+      }),
+    ),
   );
 }

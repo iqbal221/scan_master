@@ -1,55 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:quick_scanner/features/history/data/models/history_model.dart';
+import 'package:quick_scanner/features/history/presentation/screens/history_details_screen.dart';
 
 class HistoryTile extends StatelessWidget {
   final HistoryModel history;
-  final VoidCallback? onFavorite;
-  final VoidCallback? onTap;
 
-  const HistoryTile({
-    super.key,
-    required this.history,
-    this.onFavorite,
-    this.onTap,
-  });
-
-  IconData _icon() {
-    switch (history.type.toLowerCase()) {
-      case 'url':
-      case 'website':
-        return Icons.language;
-
-      case 'phone':
-        return Icons.phone;
-
-      case 'email':
-        return Icons.email;
-
-      case 'wifi':
-        return Icons.wifi;
-
-      case 'sms':
-        return Icons.sms;
-
-      case 'location':
-        return Icons.location_on;
-
-      case 'contact':
-        return Icons.person;
-
-      default:
-        return Icons.qr_code_2;
-    }
-  }
+  const HistoryTile({super.key, required this.history});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        onTap: onTap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HistoryDetailScreen(history: history),
+            ),
+          );
+        },
 
-        leading: CircleAvatar(child: Icon(_icon())),
+        leading: CircleAvatar(
+          child: Icon(
+            history.type.toLowerCase() == "qr"
+                ? Icons.qr_code
+                : Icons.barcode_reader,
+          ),
+        ),
 
         title: Text(
           history.content,
@@ -57,24 +35,11 @@ class HistoryTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
 
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(history.format),
+        subtitle: Text(history.type),
 
-            Text(
-              history.createdAt.toString(),
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
-        ),
-
-        trailing: IconButton(
-          onPressed: onFavorite,
-          icon: Icon(
-            history.isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: history.isFavorite ? Colors.red : null,
-          ),
+        trailing: Icon(
+          history.isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: Colors.red,
         ),
       ),
     );

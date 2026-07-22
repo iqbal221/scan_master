@@ -81,5 +81,27 @@ class LightTheme {
         borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
     ),
+
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: AppColors.cardLight,
+      indicatorColor: AppColors.primary.withValues(alpha: 0.15),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+          );
+        }
+
+        return const TextStyle(color: Colors.grey);
+      }),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const IconThemeData(color: AppColors.primary, size: 28);
+        }
+
+        return const IconThemeData(color: Colors.grey, size: 24);
+      }),
+    ),
   );
 }

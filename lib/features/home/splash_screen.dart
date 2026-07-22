@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:quick_scanner/core/presentation/screens/main_navbar_screen.dart';
-import 'package:quick_scanner/features/generator/presentation/screens/generator_screen.dart';
-import 'package:quick_scanner/features/scanner/presentation/screens/scanner_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String name = '/';
@@ -78,24 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: Colors.white70,
                 ),
-              ),
-
-              const SizedBox(height: 50),
-
-              const SizedBox(
-                width: 35,
-                height: 35,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: Colors.white,
-                ),
-              ),
-
-              const SizedBox(height: 70),
-
-              const Text(
-                "Version 1.0.0",
-                style: TextStyle(color: Colors.white60),
               ),
             ],
           ),
